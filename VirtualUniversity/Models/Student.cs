@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,15 +12,31 @@ namespace VirtualUniversity.Models
         //entity framework interprets ID as default primary key (has to be named ID or classnameID)
         public int ID { get; set; }
 
+        [Required]
         [StringLength(50, ErrorMessage = "Last name cannot be longer than 50 characters")]
+        [Display(Name = "Last name")]
         public string LastName { get; set; }
 
+        [Required]
         [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
+        [Column("FirstName")]
+        [Display(Name = "First Name")]
         public string FirstMidName { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Enrollment Date")]
         public DateTime EnrollmentDate { get; set; }
+
+        //calculated property, it won't be generated in the db unless we use an annotation
+        [Display(Name = "Full Name")]
+        public string FullName
+        {
+            get
+            {
+                return LastName + " " + FirstMidName;
+            }
+        }
 
         public ICollection<Enrollment> Enrollments { get; set; }
     }
